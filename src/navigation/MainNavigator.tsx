@@ -8,7 +8,11 @@ const Tab = createNativeStackNavigator();
 const MainNavigator = () => {
   return (
     <Tab.Navigator>
-      <Tab.Screen name={PATHS.TODO_SCREEN} component={TodoScreen} />
+      <Tab.Screen
+        options={{ title: "Todos" }}
+        name={PATHS.TODO_SCREEN}
+        component={TodoScreen}
+      />
     </Tab.Navigator>
   );
 };

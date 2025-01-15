@@ -7,9 +7,9 @@ export const LoginScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome to Paidy Todo App</Text>
+      <Text style={styles.title}>Welcome to Paidy Secure Todo App</Text>
       <Button
-        title={isLoading ? "Authenticating..." : "Login with Biometrics"}
+        title={isLoading ? "Authenticating..." : "Secure Login"}
         onPress={handleBiometricAuth}
         disabled={isLoading}
       />
@@ -26,8 +26,9 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   title: {
-    fontSize: 24,
+    fontSize: 20,
     marginBottom: 20,
+    textAlign: "center",
   },
   errorText: {
     color: "red",

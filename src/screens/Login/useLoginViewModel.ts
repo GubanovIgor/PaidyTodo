@@ -2,7 +2,7 @@ import { useDispatch } from "react-redux";
 import { useState } from "react";
 import * as LocalAuthentication from "expo-local-authentication";
 import { login } from "../../store/authSlice";
-import { Alert, NativeModules } from "react-native";
+import { Linking, NativeModules, Platform } from "react-native";
 
 const { OpenSecureSettings } = NativeModules;
 
@@ -13,17 +13,19 @@ export const useLoginViewModel = () => {
 
   const handleBiometricAuth = async () => {
     setIsLoading(true);
+
     try {
       const hasAuthMethods = await LocalAuthentication.isEnrolledAsync();
-      const types =
-        await LocalAuthentication.supportedAuthenticationTypesAsync();
 
       if (!hasAuthMethods) {
-        OpenSecureSettings.openSecureSettings();
-        Alert.alert(
-          "No Authentication Methods",
-          "No PIN code, Face ID, or Touch ID registered. Please set it up in the device settings."
-        );
+        if (Platform.OS === "android") {
+          OpenSecureSettings.openSecureSettings();
+        }
+
+        if (Platform.OS === "ios") {
+          Linking.openSettings();
+        }
+
         return;
       }
 
