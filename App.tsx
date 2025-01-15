@@ -1,6 +1,12 @@
-import React from 'react'
-import {View} from 'react-native'
+import React from "react";
+import { Provider } from "react-redux";
+import AppNavigator from "./src/navigation/AppNavigator";
+import { store } from "./src/store/store";
 
 export const App = () => {
-  return <View></View>
-}
+  return (
+    <Provider store={store}>
+      <AppNavigator />
+    </Provider>
+  );
+};
