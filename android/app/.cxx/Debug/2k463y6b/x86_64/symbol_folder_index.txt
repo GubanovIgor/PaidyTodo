@@ -1,0 +1,1 @@
+/Users/igorgubanov/outsource/PaidyTodo/android/app/build/intermediates/cxx/Debug/2k463y6b/obj/x86_64
