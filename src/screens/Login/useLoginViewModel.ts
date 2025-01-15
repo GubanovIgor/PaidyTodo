@@ -1,43 +1,64 @@
-import { useDispatch } from 'react-redux';
-import { useState } from 'react';
-import * as LocalAuthentication from 'expo-local-authentication';
-import { login } from '../../store/authSlice';
+import { useDispatch } from "react-redux";
+import { useState } from "react";
+import * as LocalAuthentication from "expo-local-authentication";
+import { login } from "../../store/authSlice";
+import { Alert, Linking, Platform } from "react-native";
+// import IntentLauncher from "react-native-intent-launcher";
 
 export const useLoginViewModel = () => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  /**
-   * Функция для выполнения биометрической аутентификации перед входом
-   */
+//   const openSecuritySettings = () => {
+//     if (Platform.OS === "android") {
+//       IntentLauncher.startActivity({
+//         action: "android.settings.SECURITY_SETTINGS",
+//       });
+//     }
+//   };
+
   const handleBiometricAuth = async () => {
     setIsLoading(true);
     try {
       const isSupported = await LocalAuthentication.hasHardwareAsync();
       if (!isSupported) {
-        setError('Ваше устройство не поддерживает биометрическую аутентификацию.');
+        setError("Your device does not support biometric authentication.");
         return;
       }
 
       const hasBiometrics = await LocalAuthentication.isEnrolledAsync();
       if (!hasBiometrics) {
-        setError('Нет зарегистрированных биометрических данных.');
+        Alert.alert(
+          "No Biometric Data Registered",
+          "Would you like to set up a screen lock or PIN?",
+          [
+            {
+              text: "Cancel",
+              style: "cancel",
+            },
+            {
+              text: "Go to Settings",
+              onPress: () => Linking.openSettings(),
+            },
+          ]
+        );
         return;
       }
 
       const result = await LocalAuthentication.authenticateAsync({
-        promptMessage: 'Авторизуйтесь для доступа к TODO списку',
-        fallbackLabel: 'Введите PIN',
+        promptMessage: "Authenticate to access your TODO list",
+        cancelLabel: "Cancel",
+        fallbackLabel: "Enter PIN",
       });
 
       if (result.success) {
-        dispatch(login({ token: 'secured-access-token' })); // Добавляем токен при успешной авторизации
+        dispatch(login({ token: "secured-access-token" }));
       } else {
-        setError('Аутентификация отменена или не удалась.');
+        setError("Authentication was canceled or failed.");
       }
     } catch (e: any) {
-      setError(`Ошибка: ${e.message}`);
+      setError(`Error: ${e.message}`);
     } finally {
       setIsLoading(false);
     }

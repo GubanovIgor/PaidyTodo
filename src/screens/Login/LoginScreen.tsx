@@ -1,29 +1,19 @@
 import React from "react";
-import {
-  View,
-  Button,
-  Text,
-  StyleSheet,
-  ActivityIndicator,
-} from "react-native";
+import { View, Button, Text, StyleSheet } from "react-native";
 import { useLoginViewModel } from "./useLoginViewModel";
 
 export const LoginScreen: React.FC = () => {
-  const { handleBiometricLogin, isLoading, error } = useLoginViewModel();
+  const { handleBiometricAuth, isLoading, error } = useLoginViewModel();
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Welcome to Paidy Todo App</Text>
-
-      {error && <Text style={styles.error}>{error}</Text>}
-
       <Button
-        title="Login with Biometrics"
-        onPress={handleBiometricLogin}
+        title={isLoading ? "Authenticating..." : "Login with Biometrics"}
+        onPress={handleBiometricAuth}
         disabled={isLoading}
       />
-
-      {isLoading && <ActivityIndicator size="large" color="#0000ff" />}
+      {error && <Text style={styles.errorText}>{error}</Text>}
     </View>
   );
 };
@@ -39,8 +29,8 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 20,
   },
-  error: {
+  errorText: {
     color: "red",
-    marginBottom: 10,
+    marginTop: 16,
   },
 });

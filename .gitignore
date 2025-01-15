@@ -48,3 +48,7 @@ build/
 .metro-cache/
 
 vendor/
+# Expo
+.expo
+dist/
+web-build/
