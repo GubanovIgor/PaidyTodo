@@ -1,16 +1,12 @@
-import { StackNavigationProp } from "@react-navigation/stack";
-
-export type RootStackParamList = {
+export type AuthStackParamList = {
   Login: undefined;
+};
+
+export type MainStackParamList = {
   Todo: undefined;
 };
 
-export type LoginScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  "Login"
->;
-
-export type TodoScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  "Todo"
->;
+export type RootStackParamList = {
+  AuthNavigator: undefined;
+  MainNavigator: undefined;
+};

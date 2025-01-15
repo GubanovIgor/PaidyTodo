@@ -1,26 +1,31 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import { LoginScreen, TodoScreen } from "../screens";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { PATHS } from "../constants";
 import { RootStackParamList } from "./types";
+import { useSelector } from "react-redux";
+import { RootState } from "../store/types";
+import MainNavigator from "./MainNavigator";
+import AuthNavigator from "./AuthNavigator";
 
-const Stack = createStackNavigator<RootStackParamList>();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const AppNavigator = () => {
+  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
+
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={PATHS.LOGIN_SCREEN}>
-        <Stack.Screen
-          name={PATHS.LOGIN_SCREEN}
-          component={LoginScreen}
-          options={{ title: "Login" }}
-        />
-        <Stack.Screen
-          name={PATHS.TODO_SCREEN}
-          component={TodoScreen}
-          options={{ title: "Todo List" }}
-        />
+      <Stack.Navigator
+        initialRouteName={PATHS.AUTH_NAVIGATOR}
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        {isLoggedIn ? (
+          <Stack.Screen name={PATHS.MAIN_NAVIGATOR} component={MainNavigator} />
+        ) : (
+          <Stack.Screen name={PATHS.AUTH_NAVIGATOR} component={AuthNavigator} />
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   );

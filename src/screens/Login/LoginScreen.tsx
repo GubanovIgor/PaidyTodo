@@ -1,28 +1,29 @@
 import React from "react";
-import { View, Button, Text, StyleSheet, Alert } from "react-native";
-import * as LocalAuthentication from "expo-local-authentication";
-import { PATHS } from "../../constants";
-import { LoginScreenNavigationProp } from "../../navigation/types";
+import {
+  View,
+  Button,
+  Text,
+  StyleSheet,
+  ActivityIndicator,
+} from "react-native";
+import { useLoginViewModel } from "./useLoginViewModel";
 
-interface LoginScreenProps {
-  navigation: LoginScreenNavigationProp;
-}
-
-export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
-  const handleLogin = async () => {
-    // const {success} = await LocalAuthentication.authenticateAsync()
-
-    // if (success) {
-    navigation.navigate(PATHS.TODO_SCREEN);
-    // } else {
-    //   Alert.alert('Authentication failed!')
-    // }
-  };
+export const LoginScreen: React.FC = () => {
+  const { handleBiometricLogin, isLoading, error } = useLoginViewModel();
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Welcome to Paidy Todo App</Text>
-      <Button title="Login with Biometrics" onPress={handleLogin} />
+
+      {error && <Text style={styles.error}>{error}</Text>}
+
+      <Button
+        title="Login with Biometrics"
+        onPress={handleBiometricLogin}
+        disabled={isLoading}
+      />
+
+      {isLoading && <ActivityIndicator size="large" color="#0000ff" />}
     </View>
   );
 };
@@ -37,5 +38,9 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     marginBottom: 20,
+  },
+  error: {
+    color: "red",
+    marginBottom: 10,
   },
 });

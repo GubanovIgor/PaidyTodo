@@ -1,14 +1,9 @@
 import React, { useState } from "react";
 import { View, TextInput, Button, FlatList, StyleSheet } from "react-native";
-import { TodoScreenNavigationProp } from "../../navigation/types";
 import { useTodoViewModel } from "./useTodoViewModel";
 import { TodoItem } from "../../components/TodoItem";
 
-interface TodoScreenProps {
-  navigation: TodoScreenNavigationProp;
-}
-
-export const TodoScreen: React.FC<TodoScreenProps> = ({ navigation }) => {
+export const TodoScreen: React.FC = () => {
   const [text, setText] = useState("");
   const { todos, handleAddTodo, handleDeleteTodo, handleEditTodo } =
     useTodoViewModel();
