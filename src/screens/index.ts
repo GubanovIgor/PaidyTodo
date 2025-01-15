@@ -1,2 +1,2 @@
-export {LoginScreen} from './LoginScreen'
-export {TodoScreen} from './TodoScreen'
+export { LoginScreen } from "./Login/LoginScreen";
+export { TodoScreen } from "./Todo/TodoScreen";
