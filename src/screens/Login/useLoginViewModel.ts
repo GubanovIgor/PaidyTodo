@@ -2,46 +2,27 @@ import { useDispatch } from "react-redux";
 import { useState } from "react";
 import * as LocalAuthentication from "expo-local-authentication";
 import { login } from "../../store/authSlice";
-import { Alert, Linking, Platform } from "react-native";
-// import IntentLauncher from "react-native-intent-launcher";
+import { Alert, NativeModules } from "react-native";
+
+const { OpenSecureSettings } = NativeModules;
 
 export const useLoginViewModel = () => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-//   const openSecuritySettings = () => {
-//     if (Platform.OS === "android") {
-//       IntentLauncher.startActivity({
-//         action: "android.settings.SECURITY_SETTINGS",
-//       });
-//     }
-//   };
-
   const handleBiometricAuth = async () => {
     setIsLoading(true);
     try {
-      const isSupported = await LocalAuthentication.hasHardwareAsync();
-      if (!isSupported) {
-        setError("Your device does not support biometric authentication.");
-        return;
-      }
+      const hasAuthMethods = await LocalAuthentication.isEnrolledAsync();
+      const types =
+        await LocalAuthentication.supportedAuthenticationTypesAsync();
 
-      const hasBiometrics = await LocalAuthentication.isEnrolledAsync();
-      if (!hasBiometrics) {
+      if (!hasAuthMethods) {
+        OpenSecureSettings.openSecureSettings();
         Alert.alert(
-          "No Biometric Data Registered",
-          "Would you like to set up a screen lock or PIN?",
-          [
-            {
-              text: "Cancel",
-              style: "cancel",
-            },
-            {
-              text: "Go to Settings",
-              onPress: () => Linking.openSettings(),
-            },
-          ]
+          "No Authentication Methods",
+          "No PIN code, Face ID, or Touch ID registered. Please set it up in the device settings."
         );
         return;
       }
