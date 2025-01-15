@@ -14,8 +14,8 @@ export const useTodoViewModel = () => {
     dispatch(deleteTodo(id));
   };
 
-  const handleEditTodo = (id: string, text: string, isDone: boolean) => {
-    dispatch(editTodo({ id, text, isDone }));
+  const handleEditTodo = (id: string, text: string) => {
+    dispatch(editTodo({ id, text }));
   };
 
   return {
